@@ -1,0 +1,100 @@
+################################################################################
+# IP parameters
+################################################################################
+set ip_name "{{config['name']}}"
+set ip_vendor "{{config['vendor']}}"
+set vendor_display_name "{{config['vendor_display_name']}}"
+set vendor_url "{{config['vendor_url']}}"
+
+################################################################################
+# Initial setup
+################################################################################
+set script_path [ file dirname [ file normalize [ info script ] ] ]
+set project_top "ip_prj"
+set ip_path ip_repo_generated/$ip_name
+
+puts $script_path
+
+file delete -force ${project_top}
+file delete -force ${ip_path}
+file mkdir ${project_top}
+
+################################################################################
+# Create the IP project
+################################################################################
+set project_name "ip_prj"
+create_project -force ${project_top} ${project_top}
+
+# Configures the general project settings
+set obj [get_projects ${project_name}]
+set_property "default_lib" "xil_defaultlib" $obj
+
+set_property "simulator_language" "Mixed" $obj
+set_property "source_mgmt_mode" "DisplayOnly" $obj
+set_property "target_language" "VHDL" $obj
+
+set_property "part" {{config['part']}} "$obj"
+
+################################################################################
+# Add the Xilinx IPs
+################################################################################
+{% for tcl_ip in config['xilinx_ips'] %}source $script_path/{{tcl_ip}}
+{%  endfor %}
+
+################################################################################
+# Add the HDL sources
+################################################################################
+{% for hdl_file in config['hdl_sources'] %}add_files -norecurse {{hdl_file}}
+{%  endfor %}
+
+################################################################################
+# Add the constraint sources
+################################################################################
+{% for constraint_file in config['constraint_sources'] %}add_files -norecurse $script_path/{{hdl_file}}
+{%  endfor %}
+
+################################################################################
+# Set the top
+################################################################################
+set_property top {{config['top_level']}} [current_fileset]
+
+################################################################################
+# Configure the IP
+################################################################################
+ipx::package_project -import_files -root_dir $ip_path -vendor $ip_vendor -library user -taxonomy /SRS/{{config['library']}}
+set display_name "{{config['display_name']}}"
+set ip_revision "{{config['revision']}}"
+set description "{{config['description']}}"
+
+################################################################################
+# Extra IP configuration
+################################################################################
+{% for extra_config_ins in config['extra_ip_config'] %}source ${script_path}/{{extra_config_ins}}
+{%  endfor %}
+{% if config['readme'] != "" %}
+set readme $script_path/{{config['readme']}}
+file copy $readme $ip_path/src/readme.html
+ipx::add_file_group -type readme {} [ipx::current_core]
+ipx::add_file src/readme.html [ipx::get_file_groups xilinx_readme -of_objects [ipx::current_core]]{% endif %}
+ipx::add_file_group -type utility {} [ipx::current_core]
+file copy {{config['logo']}} $ip_path/logo_srs.png
+ipx::add_file logo_srs.png [ipx::get_file_groups xilinx_utilityxitfiles -of_objects [ipx::current_core]]
+set_property type image [ipx::get_files logo_srs.png -of_objects [ipx::get_file_groups xilinx_utilityxitfiles -of_objects [ipx::current_core]]]
+set_property type LOGO [ipx::get_files logo_srs.png -of_objects [ipx::get_file_groups xilinx_utilityxitfiles -of_objects [ipx::current_core]]]
+{% for reset_port in config['resets'] %}
+ipx::add_bus_parameter POLARITY [ipx::get_bus_interfaces {{reset_port['name']}} -of_objects [ipx::current_core]]
+set_property VALUE {{reset_port['value']}} [ipx::get_bus_parameters -of_objects [ipx::get_bus_interfaces -of_objects [ipx::current_core] {{reset_port['name']}}] POLARITY]
+{%  endfor %}
+set_property name {{config['name']}} [ipx::current_core]
+set_property core_revision $ip_revision [ipx::current_core]
+set_property display_name $display_name [ipx::current_core]
+set_property vendor_display_name $vendor_display_name [ipx::current_core]
+set_property company_url $vendor_url [ipx::current_core]
+set_property description $description [ipx::current_core]
+set_property supported_families {zynq Production zynq Production zynquplus Production} [ipx::current_core]
+ipx::create_xgui_files [ipx::current_core]
+ipx::update_checksums [ipx::current_core]
+ipx::save_core [ipx::current_core]
+
+ipx::unload_core $ip_path/component.xml
+

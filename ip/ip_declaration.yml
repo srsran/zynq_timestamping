@@ -1,0 +1,53 @@
+################################################################################
+# Common
+################################################################################
+- name: srs_axi_control
+  config_path: ./common/scripts/srs_axi_control/ip.yml
+
+- name: counter_debug
+  config_path: ./common/scripts/counter_debug/ip.yml
+
+- name: system_control
+  config_path: ./common/scripts/system_control/ip.yml
+
+################################################################################
+# ADI timestamping
+################################################################################
+- name: adc_timestamp_enabler_packetizer
+  config_path: ./ADI_timestamping/scripts/adc_timestamp_enabler_packetizer/ip.yml
+
+- name: timestamp_unit_lclk_count
+  config_path: ./ADI_timestamping/scripts/timestamp_unit_lclk_count/ip.yml
+  
+- name: adc_dmac_xlength_sniffer
+  config_path: ./ADI_timestamping/scripts/adc_dmac_xlength_sniffer/ip.yml
+
+- name: adc_fifo_timestamp_enabler
+  config_path: ./ADI_timestamping/scripts/adc_fifo_timestamp_enabler/ip.yml
+
+- name: dac_control_s_axi_aclk
+  config_path: ./ADI_timestamping/scripts/dac_control_s_axi_aclk/ip.yml
+
+- name: dac_dmac_xlength_sniffer
+  config_path: ./ADI_timestamping/scripts/dac_dmac_xlength_sniffer/ip.yml
+
+- name: dac_fifo_timestamp_enabler
+  config_path: ./ADI_timestamping/scripts/dac_fifo_timestamp_enabler/ip.yml
+
+- name: dma_depack_channels
+  config_path: ./ADI_timestamping/scripts/dma_depack_channels/ip.yml
+
+- name: timestamp_unit_lclk_count
+  config_path: ./ADI_timestamping/scripts/timestamp_unit_lclk_count/ip.yml
+
+- name: adc_dma_packet_controller
+  config_path: ./ADI_timestamping/scripts/adc_dma_packet_controller/ip.yml
+
+################################################################################
+# RFdc
+################################################################################
+- name: rfdc_adc_data_decim_and_depack
+  config_path: ./RFdc_timestamping/scripts/rfdc_adc_data_decim_and_depack/ip.yml
+
+- name: rfdc_dac_data_interp_and_pack
+  config_path: ./RFdc_timestamping/scripts/rfdc_dac_data_interp_and_pack/ip.yml

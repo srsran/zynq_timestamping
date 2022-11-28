@@ -1,0 +1,18 @@
+name: "rfdc_dac_data_interp_and_pack"
+display_name: "RFdc DAC data interpolation and pack"
+description: ""
+revision: "1"
+vendor: "softwareradiosystems.com"
+vendor_display_name: "Software Radio Systems, Ltd."
+vendor_url: "https://www.softwareradiosystems.com"
+top_level: "rfdc_dac_data_interp_and_pack"
+library: "RFdc"
+xilinx_ips: "./xilinx_ips.tcl"
+extra_ip_config: "./extra_ip_config.tcl"
+hdl_sources: [
+    "../../../common/RTL_code/multibit_cross_clock_domain_fifo_synchronizer_resetless_16b.vhd",
+    "../../../common/RTL_code/multibit_cross_clock_domain_fifo_synchronizer_resetless_1b.vhd",
+    "../../../common/RTL_code/multibit_cross_clock_domain_fifo_synchronizer_resetless_3b.vhd",
+    "../../RTL_code/rfdc_dac_data_interp_and_pack.vhd"
+]
+

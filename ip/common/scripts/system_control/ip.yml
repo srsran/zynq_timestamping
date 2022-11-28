@@ -1,0 +1,16 @@
+name: "system_control"
+display_name: "System control"
+description: ""
+revision: "1"
+vendor: "softwareradiosystems.com"
+vendor_display_name: "Software Radio Systems, Ltd."
+vendor_url: "https://www.softwareradiosystems.com"
+top_level: "system_control_top"
+library: "Timestamping"
+hdl_sources: [
+    "../../RTL_code/system_control_regs_pkg.vhd",
+    "../../RTL_code/system_control_regs.vhd",
+    "../../RTL_code/system_control_top.vhd",
+    "../../../common/RTL_code/async_fifo_simple.vhd",
+    "../../../common/RTL_code/multibit_cross_clock_domain_fifo_synchronizer_resetless.vhd",
+]

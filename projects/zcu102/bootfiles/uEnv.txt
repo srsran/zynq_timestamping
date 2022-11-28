@@ -1,0 +1,5 @@
+kernel_image=Image
+devicetree_image=system.dtb
+dtb=system.dtb
+bootargs=earlycon=cdns,mmio,0xFF000000,115200n8 console=ttyPS0,115200n8 uio_pdrv_genirq.of_id=generic-uio root=/dev/mmcblk0p2 rw rootwait cma=128M clk_ignore_unused cpuidle.off=1
+uenvcmd=fatload mmc 0 0x3000000 ${kernel_image} && fatload mmc 0 0x2A00000 ${devicetree_image} && bootm 0x3000000 - 0x2A00000

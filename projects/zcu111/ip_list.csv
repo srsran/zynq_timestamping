@@ -1,0 +1,7 @@
+adc_timestamp_enabler_packetizer
+dac_fifo_timestamp_enabler
+dma_depack_channels
+rfdc_adc_data_decim_and_depack
+rfdc_dac_data_interp_and_pack
+srs_axi_control
+timestamp_unit_lclk_count

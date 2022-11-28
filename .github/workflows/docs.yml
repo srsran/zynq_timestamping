@@ -1,0 +1,30 @@
+name: 'doc'
+on:
+
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+
+  BTD:
+    name: '📓 Docs'
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: '🧰 Checkout'
+      uses: actions/checkout@v2
+
+    - name: '📓 BuildTheDocs (BTD)'
+      uses: buildthedocs/btd@v0
+      with:
+        token: ${{ github.token }}
+
+    - name: '📤 Upload artifact: HTML and LaTeX'
+      uses: actions/upload-artifact@master
+      with:
+        name: doc
+        path: |
+          doc/_build/html
+          doc/_build/latex

@@ -1,0 +1,36 @@
+#########
+# Build #
+#########
+[build-system]
+requires = ["setuptools >= 61", "wheel"]
+
+###########
+# Project #
+###########
+[project]
+authors = [
+  {name = "Software Radio Systems"},
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Development Status :: 5 - Production/Stable",
+]
+dependencies = [
+  "PyYAML",
+  "lxml >= 3.6.0",
+  "gitpython",
+  "rich",
+  "jinja2",
+]
+
+description = "SRS FPGA Tools"
+dynamic = ["version"]
+name = "srs_tools"
+readme = "README.md"
+requires-python = ">=3.7"
+
+[project.scripts]
+srs-tools-fpga-set-build-info = "srs_tools_fpga.vivado.replace_build_info:main"
+srs-tools-fpga-vivado-run = "srs_tools_fpga.vivado.run_project:main"
+srs-tools-fpga-vivado-ip-pack = "srs_tools_fpga.vivado.pack:main"
+srs-tools-fpga-generate-bootfile = "srs_tools_fpga.vivado.create_boot:main"

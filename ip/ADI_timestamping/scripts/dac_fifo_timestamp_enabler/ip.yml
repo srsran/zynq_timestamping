@@ -1,0 +1,21 @@
+name: "dac_fifo_timestamp_enabler"
+display_name: "DAC FIFO timestamp enabler"
+description: ""
+revision: "1"
+vendor: "softwareradiosystems.com"
+vendor_display_name: "Software Radio Systems, Ltd."
+vendor_url: "https://www.softwareradiosystems.com"
+top_level: "dac_fifo_timestamp_enabler"
+library: "Timestamping"
+hdl_sources: [
+    "../../RTL_code/dac_fifo_timestamp_enabler.vhd",
+    "../../../common/RTL_code/async_fifo_simple.vhd",
+    "../../../common/RTL_code/single_port_memory.vhd",
+    "../../../common/RTL_code/multibit_cross_clock_domain_fifo_synchronizer_resetless.vhd"
+]
+
+resets:
+  - name: s_axi_aresetn
+    value: ACTIVE_LOW
+  - name: DACxN_reset
+    value: ACTIVE_HIGH

@@ -1,0 +1,27 @@
+name: "srs_axi_control"
+display_name: "AXI control unit"
+description: "Module aimed at managing the communications between the PS and the FPGA, while acting as a centralized controller for the srsUE blocks implemented in the FPGA (i.e., configuration and status reporting). Currently the block interfaces the timestamped ADC and DAC"
+revision: "1"
+vendor: "softwareradiosystems.com"
+vendor_display_name: "Software Radio Systems, Ltd."
+vendor_url: "https://www.softwareradiosystems.com"
+top_level: "srs_axi_control"
+library: "Common"
+xilinx_ips: "./xilinx_ips.tcl"
+extra_ip_config: "./extra_ip_config.tcl"
+hdl_sources: [
+    "../../../common/RTL_code/async_fifo_simple.vhd",
+    "../../../common/RTL_code/multibit_cross_clock_domain_fifo_synchronizer_resetless.vhd",
+    "../../../common/RTL_code/multibit_cross_clock_domain_fifo_synchronizer_resetless_64b.vhd",
+    "../../../common/RTL_code/multibit_cross_clock_domain_fifo_synchronizer_resetless_32b.vhd",
+    "../../../common/RTL_code/multibit_cross_clock_domain_fifo_synchronizer_resetless_1b.vhd",
+    "../../RTL_code/srs_axi_control.vhd"
+]
+
+resets:
+  - name: s00_axi_aresetn
+    value: ACTIVE_LOW
+  - name: ADCxN_reset
+    value: ACTIVE_HIGH
+  - name: sw_generated_resetn
+    value: ACTIVE_LOW

@@ -1,0 +1,16 @@
+name: "dac_dmac_xlength_sniffer"
+display_name: "DAC DMAC xlength sniffer"
+description: ""
+revision: "1"
+vendor: "softwareradiosystems.com"
+vendor_display_name: "Software Radio Systems, Ltd."
+vendor_url: "https://www.softwareradiosystems.com"
+top_level: "dac_dmac_xlength_sniffer"
+library: "Timestamping"
+hdl_sources: [
+    "../../RTL_code/dac_dmac_xlength_sniffer.vhd"
+]
+
+resets:
+  - name: s_axi_aresetn
+    value: ACTIVE_LOW

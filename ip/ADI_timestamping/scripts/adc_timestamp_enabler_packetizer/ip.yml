@@ -1,0 +1,23 @@
+name: "adc_timestamp_enabler_packetizer"
+display_name: "ADC timestamp enabler packetizer"
+description: ""
+revision: "1"
+vendor: "softwareradiosystems.com"
+vendor_display_name: "Software Radio Systems, Ltd."
+vendor_url: "https://www.softwareradiosystems.com"
+top_level: "adc_timestamp_enabler_packetizer"
+library: "Timestamping"
+xilinx_ips: "./xilinx_ips.tcl"
+hdl_sources: [
+    "../../../common/RTL_code/async_fifo_simple.vhd",
+    "../../../common/RTL_code/multibit_cross_clock_domain_fifo_synchronizer_resetless.vhd",
+    "../../RTL_code/adc_timestamp_enabler_packetizer.vhd"
+]
+
+resets:
+  - name: ADCxN_reset
+    value: ACTIVE_HIGH
+  - name: axi_aresetn
+    value: ACTIVE_LOW
+  - name: data_fifo_rstn
+    value: ACTIVE_LOW

@@ -1,0 +1,18 @@
+name: "rfdc_adc_data_decim_and_depack"
+display_name: "RFdc ADC data decimation and depack"
+description: ""
+revision: "1"
+vendor: "softwareradiosystems.com"
+vendor_display_name: "Software Radio Systems, Ltd."
+vendor_url: "https://www.softwareradiosystems.com"
+top_level: "rfdc_adc_data_decim_and_depack"
+library: "RFdc"
+xilinx_ips: "./xilinx_ips.tcl"
+extra_ip_config: "./extra_ip_config.tcl"
+hdl_sources: [
+    "../../../common/RTL_code/multibit_cross_clock_domain_fifo_synchronizer_resetless_16b.vhd",
+    "../../../common/RTL_code/multibit_cross_clock_domain_fifo_synchronizer_resetless_3b.vhd",
+    "../../../common/RTL_code/multibit_cross_clock_domain_fifo_synchronizer_resetless_1b.vhd",
+    "../../RTL_code/rfdc_adc_data_decim_and_depack.vhd"
+]
+

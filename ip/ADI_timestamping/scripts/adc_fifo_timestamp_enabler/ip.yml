@@ -1,0 +1,18 @@
+name: "adc_fifo_timestamp_enabler"
+display_name: "ADC FIFO timestamp enabler"
+description: ""
+revision: "1"
+vendor: "softwareradiosystems.com"
+vendor_display_name: "Software Radio Systems, Ltd."
+vendor_url: "https://www.softwareradiosystems.com"
+top_level: "adc_fifo_timestamp_enabler"
+library: "Timestamping"
+hdl_sources: [
+    "../../RTL_code/adc_fifo_timestamp_enabler.vhd",
+    "../../../common/RTL_code/multibit_cross_clock_domain_fifo_synchronizer_resetless.vhd",
+    "../../../common/RTL_code/async_fifo_simple.vhd",
+]
+
+resets:
+  - name: ADCxN_reset
+    value: ACTIVE_HIGH

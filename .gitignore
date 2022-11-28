@@ -1,0 +1,75 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+*.bif
+
+projects/pluto/hdl
+test/python/libiio
+.Xil
+
+projects/pluto/bootfiles/*.bit
+projects/pluto/bootfiles/*.BIN
+projects/pluto/bootfiles/*.bin
+
+projects/antsdr/bootfiles/*.bit
+projects/antsdr/bootfiles/*.BIN
+projects/antsdr/bootfiles/*.bin
+
+projects/zcu102/bootfiles/*.bit
+projects/zcu102/bootfiles/*.BIN
+projects/zcu102/bootfiles/*.dtb
+projects/zcu102/bootfiles/copy_boot.sh
+
+projects/zcu111/bootfiles/*.bit
+projects/zcu111/bootfiles/*.BIN
+projects/zcu111/bootfiles/*.dtb
+projects/zcu111/bootfiles/copy_boot.sh
+
+.venv
+venv
+pyadi-iio
+
+system_top.hwdef
+
+test/cpp/log.txt
+test/rf-driver/srsRAN
+test/rf-driver/bin_test
+
+projects/antsdr/hdl
+projects/pluto/hdl
+
+NA
+srsRAN
+app/bin_app
+
+_theme
+_build

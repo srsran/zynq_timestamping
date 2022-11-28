@@ -1,0 +1,2 @@
+include srs_tools_fpga/vivado/ip_template.j2
+include srs_tools_fpga/vivado/logo_srs.png

@@ -1,0 +1,16 @@
+name: "timestamp_unit_lclk_count"
+display_name: "Timestamp unit lclk counter"
+description: ""
+revision: "1"
+vendor: "softwareradiosystems.com"
+vendor_display_name: "Software Radio Systems, Ltd."
+vendor_url: "https://www.softwareradiosystems.com"
+top_level: "timestamp_unit_lclk_count"
+library: "Timestamping"
+hdl_sources: [
+    "../../RTL_code/timestamp_unit_lclk_count.vhd",
+]
+
+resets:
+  - name: ADCxN_reset
+    value: ACTIVE_HIGH

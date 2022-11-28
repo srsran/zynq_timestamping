@@ -1,0 +1,10 @@
+work, ../../ip/ADI_timestamping/RTL_code/adc_dma_packet_controller.vhd
+work, ../../ip/ADI_timestamping/RTL_code/adc_dmac_xlength_sniffer.vhd
+work, ../../ip/ADI_timestamping/RTL_code/adc_fifo_timestamp_enabler.vhd
+work, ../../ip/ADI_timestamping/RTL_code/adc_timestamp_enabler_packetizer.vhd
+work, ../../ip/ADI_timestamping/RTL_code/dac_dmac_xlength_sniffer.vhd
+work, ../../ip/ADI_timestamping/RTL_code/dac_fifo_timestamp_enabler.vhd
+work, ../../ip/ADI_timestamping/RTL_code/dma_depack_channels.vhd
+work, ../../ip/ADI_timestamping/RTL_code/timestamp_unit_lclk_count.vhd
+work, ../../ip/RFdc_timestamping/RTL_code/rfdc_adc_data_decim_and_depack.vhd
+work, ../../ip/RFdc_timestamping/RTL_code/rfdc_dac_data_interp_and_pack.vhd

@@ -1,0 +1,17 @@
+name: "dma_depack_channels"
+display_name: "DMA depack channels"
+description: ""
+revision: "1"
+vendor: "softwareradiosystems.com"
+vendor_display_name: "Software Radio Systems, Ltd."
+vendor_url: "https://www.softwareradiosystems.com"
+top_level: "dma_depack_channels"
+library: "Timestamping"
+extra_ip_config: "./extra_ip_config.tcl"
+hdl_sources: [
+    "../../RTL_code/dma_depack_channels.vhd"
+]
+
+resets:
+  - name: s_axi_aresetn
+    value: ACTIVE_LOW
