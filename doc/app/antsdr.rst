@@ -63,7 +63,7 @@ srsue configuration with the parameter values defined above.
 
 .. code-block:: bash
 
-    git clone https://github.com/softwareradiosystems/zynq_timestamping.git --recursive
+    git clone https://github.com/srsran/zynq_timestamping.git --recursive
     cd app
     ./prepare.sh
 
