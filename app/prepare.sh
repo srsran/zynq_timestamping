@@ -45,12 +45,12 @@ cd $build_dir || exit
 if [ -z "$CROSS_COMPILE" ]
 then
   cmake -DCMAKE_BUILD_TYPE=Release -DUSE_LTE_RATES=On -DRF_FOUND=TRUE -DENABLE_SRSENB=ON -DENABLE_SRSEPC=ON -DENABLE_SRSUE=ON ..
-  make -j4 usrp_txrx pdsch_ue pdsch_enodeb srsenb srsepc srsue
+  make -j$(nproc) usrp_txrx pdsch_ue pdsch_enodeb srsenb srsepc srsue
 else
   # if we are cross-compiling for zcu102 or zcu111, we only need to test txrx_test (but user may want to play with pdsch_ue too)
   echo "Preparing for cross-compilation"
   cmake -DCMAKE_BUILD_TYPE=Release -DUSE_LTE_RATES=On -DRF_FOUND=TRUE -DENABLE_SRSEPC=OFF -DENABLE_SRSENB=OFF -DENABLE_SRSUE=ON $toolchain_cmd ..
-  make -j4 usrp_txrx pdsch_ue srsue
+  make -j$(nproc) usrp_txrx pdsch_ue srsue
 fi
 
 echo 'Copying configuration files...'
@@ -78,14 +78,14 @@ then
   sed -i 's/#nof_phy_threads     = 3/nof_phy_threads     = 3/g' "$TEST_OUTPUT"/srsue/ue.conf
   echo '[expert]' >> "$TEST_OUTPUT"/srsue/ue.conf
   echo 'lte_sample_rates = true' >> "$TEST_OUTPUT"/srsue/ue.conf
-  
+
   mkdir -p "$TEST_OUTPUT"/srsenb
   cp srsenb/src/srsenb "$TEST_OUTPUT"/srsenb/
   cp ../srsenb/enb.conf.example "$TEST_OUTPUT"/srsenb/enb.conf
   cp ../srsenb/rb.conf.example "$TEST_OUTPUT"/srsenb/rb.conf
   cp ../srsenb/rr.conf.example "$TEST_OUTPUT"/srsenb/rr.conf
   cp ../srsenb/sib.conf.example "$TEST_OUTPUT"/srsenb/sib.conf
-  
+
   ################################################################################
   # Adjust eNodeB config
   ################################################################################
@@ -95,7 +95,7 @@ then
   echo 'lte_sample_rates = true' >> "$TEST_OUTPUT"/srsenb/enb.conf
   sed -i 's/prach_freq_offset = 4/prach_freq_offset = 0/g' "$TEST_OUTPUT"/srsenb/sib.conf
   sed -i 's/zero_correlation_zone_config = 5/zero_correlation_zone_config = 0/g' "$TEST_OUTPUT"/srsenb/sib.conf
-  
+
   mkdir -p "$TEST_OUTPUT"/srsepc
   cp srsepc/src/srsepc "$TEST_OUTPUT"/srsepc/
   cp ../srsepc/epc.conf.example "$TEST_OUTPUT"/srsepc/epc.conf
