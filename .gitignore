@@ -32,7 +32,6 @@
 *.app
 *.bif
 
-projects/pluto/hdl
 test/python/libiio
 .Xil
 
@@ -63,9 +62,6 @@ system_top.hwdef
 test/cpp/log.txt
 test/rf-driver/srsRAN
 test/rf-driver/bin_test
-
-projects/antsdr/hdl
-projects/pluto/hdl
 
 NA
 srsRAN
