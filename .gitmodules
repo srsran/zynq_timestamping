@@ -1,12 +1,12 @@
 [submodule "projects/pluto/hdl"]
 	path = projects/pluto/hdl
 	url = https://github.com/analogdevicesinc/hdl
-    branch = hdl_2019_r2
+	branch = hdl_2019_r2
 
 [submodule "projects/zcu102/hdl"]
 	path = projects/zcu102/hdl
 	url = https://github.com/analogdevicesinc/hdl
-    branch = hdl_2019_r2
+	branch = hdl_2019_r2
 
 [submodule "projects/antsdr/hdl"]
 	path = projects/antsdr/hdl
