@@ -1,3 +1,0 @@
-*.bin filter=lfs diff=lfs merge=lfs -text
-*.BIN filter=lfs diff=lfs merge=lfs -text
-*.dtb filter=lfs diff=lfs merge=lfs -text
