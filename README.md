@@ -26,25 +26,18 @@ We recommend you to go through the application notes, as the detailed steps can 
 
 - The solution has been developed, validated and tested using:
 
-  * Git LFS
   * Vivado 2019.2
   * SRS Python Tools:
 
     ```
     cd python_tools
+    sudo pip3 install -U pip
     pip3 install .
     ```
   * [optional] For documentation:
     ```
     npm install teroshdl
     ```
-
-  * [optional] The repository uses LFS to provide [pre-built images](/release/) (note that it is
-     preferrable to clone the repository after installing LFS support):
-  ```
-  sudo apt-get install git-lfs
-  git lfs install
-  ```
 
 - To clone the repository and the utilized submodules:
 
