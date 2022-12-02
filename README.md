@@ -44,3 +44,7 @@ We recommend you to go through the application notes, as the detailed steps can 
   ```
   git clone --recursive
   ```
+
+# Pre-built images
+
+Pre-built images for all supported boards can be found attached as an asset to the [released code](https://github.com/srsran/zynq_timestamping/releases).
