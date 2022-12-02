@@ -19,6 +19,7 @@ sudo apt install -y git
 ​
 ```
 cd *local_SRS_FPGA_repo_path*/lib/src/phy/ue/fpga_ue/project_scripts/python_tools/srs_tools_fpga
+sudo pip3 install -U pip
 pip3 install .
 ```
 

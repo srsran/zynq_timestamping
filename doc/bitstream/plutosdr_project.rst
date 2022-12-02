@@ -21,6 +21,7 @@ Prerequisites
 .. code-block:: bash
 
     cd python_tools
+    sudo pip3 install -U pip
     sudo pip3 install .
 
 

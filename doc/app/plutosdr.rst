@@ -52,6 +52,7 @@ data capture generated as a result of the Tx-Rx test:
 
 .. code-block:: bash
 
+    sudo pip3 install -U pip
     sudo pip3 install numpy matplotlib
 
 
