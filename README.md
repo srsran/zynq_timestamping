@@ -22,6 +22,8 @@ The full details of the Zynq timestamping solution can be found in the [document
 
 We recommend you to go through the application notes, as the detailed steps can be (often easily) modified/reused to target different boards and/or SDR applications.
 
+Please, use the [Zynq timestamping Discussions space](https://github.com/srsran/zynq_timestamping/discussions) for discussion and community support. Make sure to read the [overview](https://github.com/srsran/zynq_timestamping/discussions/1) and to follow the guidelines when opening a new discussion point.
+
 # Requirements
 
 - The solution has been developed, validated and tested using:
