@@ -20,7 +20,7 @@ For this application note, the following hardware and software will be used:
 
         1. Dell XPS13 with Ubuntu 20.04.4
         2. USRP B200 mini
-        3. PlutoSDR with custom SRS bitstream
+        3. ADALM-PLUTO SDR with custom SRS bitstream
         4. srsRAN
         5. SRS Zynq timestamping
         6. Analog Devices libiio and libad9361 software libraries
@@ -67,6 +67,19 @@ utilized by the Zynq timestamping solution.
     git clone https://github.com/srsran/zynq_timestamping.git --recursive
     cd app
     ./prepare.sh
+
+
+**NOTE:** the ADALM-PLUTO SDR bitsream has been built by default to implement an internal buffering stage in
+the timestamped DAC path supporting storage of up to 4x 2000 sample-packets coming from the CPU - that is,
+according to values set for the *CONFIG.PARAM_BUFFER_LENGTH* and *CONFIG.PARAM_MAX_DMA_PACKET_LENGTH*
+parameters of the
+`dac_fifo_timestamp_enabler <https://github.com/srsran/zynq_timestamping/tree/main/ip/ADI_timestamping/RTL_code/dac_fifo_timestamp_enabler.vhd>`_
+block in the board's
+`system.tcl <https://github.com/srsran/zynq_timestamping/tree/main/projects/pluto/src/bd/system.tcl#L345>`_
+script, which enables storing 4 ms worth of signal for 1.4 MHz BW (i.e., 1920 samples per subframe). This
+s aligned with the default
+`RF IIO driver <https://github.com/srsran/zynq_timestamping/tree/main/sw/lib/src/phy/rf/rf_iio_imp.c#L36>`_
+implementation, which sets the actual DMA packet exchange to a fixed size of 1920 samples.
 
 Running
 *******

@@ -464,6 +464,16 @@ initialization script call as follows, so that it uses the Xilinx librfdc librar
 When the build finishes, you will find the application under the *bin_app/* subfolder. The
 binary needs then to be transferred to the board (e.g., in */home/srs/bin*).
 
+**NOTE:** both ZCU bitsreams have been built by default to implement an internal buffering stage in
+the timestamped DAC path supporting storage of up to 8x 16000 sample-packets coming from the CPU - that is,
+according to the default values for the *CONFIG.PARAM_BUFFER_LENGTH* and *CONFIG.PARAM_MAX_DMA_PACKET_LENGTH*
+parameters of the
+`dac_fifo_timestamp_enabler <https://github.com/srsran/zynq_timestamping/tree/main/ip/ADI_timestamping/RTL_code/dac_fifo_timestamp_enabler.vhd>`_
+block, which would theoretically enable storing 8 ms worth of signal up to 10 MHz BW (i.e., 15360 samples
+per subframe). Nevertheless, by default the
+`RF IIO driver <https://github.com/srsran/zynq_timestamping/tree/main/sw/lib/src/phy/rf/rf_iio_imp.c#L36>`_
+uses DMA packets of 1920 samples - that is, 1 ms (one subframe) worth of signal for 1.4 MHz BW.
+
 Running
 *******
 
