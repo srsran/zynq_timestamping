@@ -68,7 +68,7 @@ the timestamped DAC path supporting storage of up to 10x 8000 sample-packets com
 according to values set for the *CONFIG.PARAM_BUFFER_LENGTH* and *CONFIG.PARAM_MAX_DMA_PACKET_LENGTH*
 parameters of the
 `dac_fifo_timestamp_enabler <https://github.com/srsran/zynq_timestamping/tree/main/ip/ADI_timestamping/RTL_code/dac_fifo_timestamp_enabler.vhd>`_
-block the board's
+block in the board's
 `system.tcl <https://github.com/srsran/zynq_timestamping/tree/main/projects/antsdr/src/bd/system.tcl#L340>`_
 script, which would theoretically enable storing 10 ms worth of signal up to 5 MHz BW (i.e., 7680 samples
 per subframe). Nevertheless, by default the

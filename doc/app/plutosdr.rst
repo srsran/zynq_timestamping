@@ -74,7 +74,7 @@ the timestamped DAC path supporting storage of up to 4x 2000 sample-packets comi
 according to values set for the *CONFIG.PARAM_BUFFER_LENGTH* and *CONFIG.PARAM_MAX_DMA_PACKET_LENGTH*
 parameters of the
 `dac_fifo_timestamp_enabler <https://github.com/srsran/zynq_timestamping/tree/main/ip/ADI_timestamping/RTL_code/dac_fifo_timestamp_enabler.vhd>`_
-block the board's
+block in the board's
 `system.tcl <https://github.com/srsran/zynq_timestamping/tree/main/projects/pluto/src/bd/system.tcl#L345>`_
 script, which enables storing 4 ms worth of signal for 1.4 MHz BW (i.e., 1920 samples per subframe). This
 s aligned with the default
