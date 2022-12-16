@@ -73,7 +73,7 @@ block the board's
 script, which would theoretically enable storing 10 ms worth of signal up to 5 MHz BW (i.e., 7680 samples
 per subframe). Nevertheless, by default the
 `RF IIO driver <https://github.com/srsran/zynq_timestamping/tree/main/sw/lib/src/phy/rf/rf_iio_imp.c#L36>`_
-of 1920 samples - that is, 1 ms (one subframe) worth of signal for 1.4 MHz BW.
+uses DMA packets of 1920 samples - that is, 1 ms (one subframe) worth of signal for 1.4 MHz BW.
 
 2. Execute the initialization script. It will compile the srsRAN stack as well as the RF drivers
 utilized by the Zynq timestamping solution. Moreover, it will also modify the default srsenb and

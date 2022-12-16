@@ -472,7 +472,7 @@ parameters of the
 block, which would theoretically enable storing 8 ms worth of signal up to 10 MHz BW (i.e., 15360 samples
 per subframe). Nevertheless, by default the
 `RF IIO driver <https://github.com/srsran/zynq_timestamping/tree/main/sw/lib/src/phy/rf/rf_iio_imp.c#L36>`_
-of 1920 samples - that is, 1 ms (one subframe) worth of signal for 1.4 MHz BW.
+ouses DMA packets f 1920 samples - that is, 1 ms (one subframe) worth of signal for 1.4 MHz BW.
 
 Running
 *******
