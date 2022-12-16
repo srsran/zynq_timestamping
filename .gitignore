@@ -30,7 +30,6 @@
 *.exe
 *.out
 *.app
-*.bif
 
 test/python/libiio
 .Xil
