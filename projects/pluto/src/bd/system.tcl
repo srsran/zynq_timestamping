@@ -276,7 +276,7 @@ proc create_root_design { parentCell } {
    CONFIG.ADC_INIT_DELAY {21} \
    CONFIG.CMOS_OR_LVDS_N {1} \
    CONFIG.ID {0} \
-   CONFIG.MODE_1R1T {0} \
+   CONFIG.MODE_1R1T {1} \
  ] $axi_ad9361
 
   # Create instance: axi_ad9361_adc_dma, and set properties
@@ -347,8 +347,9 @@ proc create_root_design { parentCell } {
    CONFIG.PARAM_BUFFER_LENGTH {4} \
    CONFIG.PARAM_BYPASS {false} \
    CONFIG.PARAM_DMA_LENGTH_WIDTH {24} \
-   CONFIG.PARAM_MAX_DMA_PACKET_LENGTH {1000} \
+   CONFIG.PARAM_MAX_DMA_PACKET_LENGTH {2000} \
    CONFIG.PARAM_MEM_TYPE {ramb36e1} \
+   CONFIG.PARAM_x1_FPGA_SAMPLING_RATIO {true} \
  ] $dac_fifo_timestamp_e_0
 
   # Create instance: logic_or, and set properties

@@ -339,7 +339,7 @@ proc create_root_design { parentCell } {
   # Create instance: dac_fifo_timestamp_e_0, and set properties
   set dac_fifo_timestamp_e_0 [ create_bd_cell -type ip -vlnv softwareradiosystems.com:user:dac_fifo_timestamp_enabler:1.0 dac_fifo_timestamp_e_0 ]
   set_property -dict [ list \
-   CONFIG.PARAM_BUFFER_LENGTH {11} \
+   CONFIG.PARAM_BUFFER_LENGTH {10} \
    CONFIG.PARAM_MAX_DMA_PACKET_LENGTH {8000} \
    CONFIG.PARAM_MEM_TYPE {ramb36e1} \
    CONFIG.PARAM_x1_FPGA_SAMPLING_RATIO {true} \

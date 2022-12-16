@@ -35,6 +35,8 @@ add_files -fileset [get_filesets constrs_1] ${script_dir}/hdl/projects/common/xi
 add_files -fileset [get_filesets constrs_1] ${script_dir}/hdl/projects/pluto/system_constr.xdc
 # Design Checkpoint files
 #  Synthesis config
+set_property STEPS.SYNTH_DESIGN.ARGS.DIRECTIVE AreaOptimized_high [get_runs synth_1]
+set_property strategy Area_Explore [get_runs impl_1]
 # Config tcl
 # IP tcl
 source ${script_dir}/src/ip/ips.tcl

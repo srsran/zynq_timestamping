@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Preparation
+if [ -z "$SRS_VIVADO_PATH" ]
+then
+    VIVADO_VERSION="2019.2"
+    export SRS_VIVADO_PATH=/opt/Xilinx/Vivado/$VIVADO_VERSION/
+fi
+source $SRS_VIVADO_PATH/settings64.sh
+
 gen_release() {
     board=$1
     pwd=$2
