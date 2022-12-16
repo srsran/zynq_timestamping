@@ -20,7 +20,7 @@ For this application note, the following hardware and software will be used:
 
         1. Dell XPS13 with Ubuntu 20.04.4
         2. USRP B200 mini
-        3. antsdr with custom SRS bitstream
+        3. AntSDR with custom SRS bitstream
         4. srsRAN
         5. SRS Zynq timestamping
         6. Analog Devices libiio and libad9361 software libraries
@@ -54,8 +54,26 @@ Building and configuring srsRAN
 .. code-block:: bash
 
     export BOARD_IP="192.168.1.10"
-    export FREQ_OFFSET="-4100"
-    export RX_GAIN=50
+    export FREQ_OFFSET="0"
+    export RX_GAIN="50"
+    export TIME_ADV_NSAMPLES="0"
+
+
+**NOTE (1):** we advise starting with *FREQ_OFFSET="0"* and *TIME_ADV_NSAMPLES="0"* and then manually
+adjusting them as required by the specific utilized hardware setup, in order to minimize the CFO and
+ensure a good time-alignment between eNB and UE.
+
+**NOTE (2):** the AntSDR bitsream has been built by default to implement an internal buffering stage in
+the timestamped DAC path supporting storage of up to 10x 8000 sample-packets coming from the CPU - that is,
+according to values set for the *CONFIG.PARAM_BUFFER_LENGTH* and *CONFIG.PARAM_MAX_DMA_PACKET_LENGTH*
+parameters of the
+`dac_fifo_timestamp_enabler <https://github.com/srsran/zynq_timestamping/tree/main/ip/ADI_timestamping/RTL_code/dac_fifo_timestamp_enabler.vhd>`_
+block the board's
+`system.tcl <https://github.com/srsran/zynq_timestamping/tree/main/projects/antsdr/src/bd/system.tcl#L340>`_
+script, which would theoretically enable storing 10 ms worth of signal up to 5 MHz BW (i.e., 7680 samples
+per subframe). Nevertheless, by default the
+`RF IIO driver <https://github.com/srsran/zynq_timestamping/tree/main/sw/lib/src/phy/rf/rf_iio_imp.c#L36>`_
+of 1920 samples - that is, 1 ms (one subframe) worth of signal for 1.4 MHz BW.
 
 2. Execute the initialization script. It will compile the srsRAN stack as well as the RF drivers
 utilized by the Zynq timestamping solution. Moreover, it will also modify the default srsenb and
