@@ -458,7 +458,7 @@ initialization script call as follows, so that it uses the Xilinx librfdc librar
 
 .. code-block:: bash
 
-   ./prepare.sh rfsoc
+   ./prepare.sh zcu111
 
 
 When the build finishes, you will find the application under the *bin_app/* subfolder. The
