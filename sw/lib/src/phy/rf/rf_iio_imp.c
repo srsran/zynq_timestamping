@@ -616,12 +616,12 @@ int rf_iio_open_multi(char* args, void** h, uint32_t nof_rx_antennas)
     goto out_error;
   }
 
-  if (iio_channel_attr_write(handler->rx_streamer._channel, "rf_port_select", "A_BALANCED")) {
-    fprintf(stderr, "failed to create the rf_port with A_BALENCED\n");
+  if (iio_channel_attr_write(handler->rx_streamer._channel, "rf_port_select", "A_BALANCED") <= 0) {
+    fprintf(stderr, "failed to create the rf_port with rx = A_BALANCED\n");
   }
 
-  if (iio_channel_attr_write(handler->tx_streamer._channel, "rf_port_select", "A")) {
-    fprintf(stderr, "failed to create the rf_port with A\n");
+  if (iio_channel_attr_write(handler->tx_streamer._channel, "rf_port_select", "A") <= 0) {
+    fprintf(stderr, "failed to create the rf_port with tx = A\n");
   }
 
   // Find and enable streaming channels
