@@ -39,7 +39,7 @@ Bitstream generation
 
 .. code-block:: bash
 
-   cd projects/plutosdr
+   cd projects/pluto
    ./create_project.sh bitstream
 
 
