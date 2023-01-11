@@ -1,0 +1,461 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Overview of the Zynq timestamping solution &mdash; zynq_timestamping  1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ADALM-PLUTO project build" href="plutosdr_project.html" />
+    <link rel="prev" title="SRS Zynq timestamping solution" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #ffffff" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Main page</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">SRS Zynq timestamping solution</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FPGA projects</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview of the Zynq timestamping solution</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fpga-block-details">FPGA block details</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#timestamping-dma-packet-headers">Timestamping DMA-packet headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#user-definable-parameters">User-definable parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plutosdr_project.html">ADALM-PLUTO project build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="antsdr_project.html">MicroPhase AntSDR project build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zcu102_project.html">ZCU102 project build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zcu111_project.html">ZCU111 project build</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Application notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../app/antsdr.html">Application Note: End-to-End 4G testing with AntSDR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../app/plutosdr.html">Application Note: Tx-Rx testing with ADALM-PLUTO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../app/zcu.html">Application Note: Petalinux build, software cross-compilation and Tx-Rx testing with the ZCU102 and ZCU111 platforms</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">RTL modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rtl_module/adc_dma_packet_controller.html">ADC DMA packet controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rtl_module/adc_dmac_xlength_sniffer.html">ADC DMAC xlength sniffer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rtl_module/adc_fifo_timestamp_enabler.html">ADC FIFO timestamp enabler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rtl_module/adc_timestamp_enabler_packetizer.html">ADC timestamp enabler packetizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rtl_module/dac_dmac_xlength_sniffer.html">DAC DMAC xlength sniffer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rtl_module/dac_fifo_timestamp_enabler.html">DAC FIFO timestamp enabler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rtl_module/dma_depack_channels.html">DMA depack channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rtl_module/timestamp_unit_lclk_count.html">Timestamp unit lclk count</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rtl_module/rfdc_adc_data_decim_and_depack.html">RFDC ADC data interp and pack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rtl_module/rfdc_dac_data_interp_and_pack.html">RFDC dac data decim and depack</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">zynq_timestamping </a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Overview of the Zynq timestamping solution</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/srsran/zynq_timestamping/blob/main/doc/bitstream/overview.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="overview-of-the-zynq-timestamping-solution">
+<span id="overview"></span><h1>Overview of the Zynq timestamping solution<a class="headerlink" href="#overview-of-the-zynq-timestamping-solution" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>An overview of the timestamping FPGA logic for the ADC and DAC chains can be observed below and
+comprises the blocks listed below.</p>
+<p>The main purpose of the Zynq FPGA timestamping slution is to enable a time-synchronized operation
+between the FPGA and the ARM, which ultimately allows the precise timing of the packets to be
+transmitted in the UL (i.e., DAC chain).</p>
+<p>In the MPSoC case, the current design builds on top of the baseline ADI firmware for the AD936x
+chipset. Towards that end, no modifications of the original ADI’s HDL code are required; that is,
+modifications only take place at system-level (i.e., block instantiation, interconnection and
+configuration). As for the ZCU111 implementations, the design directly interfaces the RFdc IP core
+and provides a signal adequation stage targeting the typical 4G/5G sampling rates (i.e.,
+configurable ADC decimation and DAC interpolation logic). The logic managing the timestamping per
+se is common to both architectures.</p>
+</div>
+<div class="section" id="fpga-block-details">
+<h2>FPGA block details<a class="headerlink" href="#fpga-block-details" title="Permalink to this headline">¶</a></h2>
+<p>Details on the different FPGA blocks comprising the timestamping solution are provided next:</p>
+<p>1. <strong>Sample counter</strong> (<em>timestamp_unit_lclk_count</em>): this simple block will just count the number
+of samples that have passed since the last system reset. It must be noted that in some RF front-end
+boards (e.g., FMCOMMS2/3/4) and as for ADI’s firmware design, the FPGA receives a clock that is 2
+times (1x1 antenna configuration; 4 times for 2x2 antenna configuration) the sampling-rate of the
+ADC/DAC chains (which use a shared configuration); an input clock-enable port is used in those cases
+to make sure that the sample-counting takes this into account (e.g., for zcu102 with 1x1 configuration
+it will only count 1 out of each 2 clocks).</p>
+<p>2. <strong>ADC timestamping</strong> (<em>adc_fifo_timestamp_enabler</em>): the I/Q samples travelling in the ADC chain
+are organized in variable-length packets (e.g., length as requested from the srsRAN software
+application when managing the DMA buffers interconnecting the ARM and the FPGA). Moreover, a header
+will be added to each DMA packet in order to enable a time-synchronized operation between the FPGA
+and the ARM; that is, samples are provided in an ordered manner (packetized, with no losses) and a
+timestamp value is associated to the first sample of each packet. The timestamp is a 64-bit integer
+value corresponding to the AD936x sample count. In those cases where the ADC chain is only employing
+1 out of N clock cycles to forward data to the ARM, the timestamped ADC chain will exploit the
+unused clock cycles to transmit the additional timestamp-related (i.e., non user-data) information;
+otherwise, an early conversion to the AXI clock domain will take place.</p>
+<p>3. <strong>DMA packet size sniffer (ADC chain)</strong> (<em>adc_dmac_xlength_sniffer</em>): in AD936x-based systems,
+this block will intercept the communication between the PS and ADI’s <em>axi_dmac</em> ADC-chain instance
+with the aim to passively capturing the length of the current DMA packet requested by the ARM
+(i.e.,
+<a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_dmac">x_length register value</a>
+),
+to provide the ADC timestamping logic with the required information. Taking into account the
+interfacing requirements of the <em>adc_fifo_timestamp_enabler</em> block, the captured <em>x-length</em>
+value will be translated to the destination ADC-clock domain before being forwarded.</p>
+<p>4. <strong>DMA packet controller (ADC chain)</strong> (<em>ADC_DMA_packet_controller</em>): this block provides the
+control functions to ensure a succesful packet-level forwarding of ADC data to the DMA. Besides
+the sniffed DMA packet-length information, the block takes into account the status of the DMA FIFO
+before starting the forwarding of a new packet.</p>
+<p>5. <strong>DMA packet size sniffer (DAC chain)</strong> (<em>dac_dmac_xlength_sniffer</em>): in AD936x-based systems,
+this block will intercept the communication between the PS and ADI’s <em>axi_dmac</em> DAC-chain instance
+with the aim to passively capturing the length of the current DMA packet requested by the ARM
+(i.e.,
+<a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_dmac">x_length register value</a>
+), to provide the DAC timestamping logic with the required information. In this case, no
+clock-domain conversion will be required and the captured <em>x-length</em> parameter will be
+forwarded at the origin AXI-clock.</p>
+<p>6. <strong>DAC timestamping</strong> (<em>dac_fifo_timestamp_enabler</em>): the I/Q samples received from the ARM to be
+forwarded to the DAC chip will be organized in variable-length packets (e.g., length as required
+by the srsRAN software application when managing the DMA buffers interconnecting the ARM and the
+FPGA). Moreover, each packet will include a header enabling a time-synchronized operation between
+the FPGA and the ARM: that’s it, samples are provided in an ordered manner (packetized, with no
+losses) and a timestamp value is associated to the first sample of each packet. The timestamp is
+a 64-bit integer value corresponding to the time at which the ARM expects the first sample of the
+packet to enter the DAC chain (i.e., offset with respect to actual sample count or current FPGA
+time). To this end, the block includes a circular buffer, providing intermediate storage of the
+I/Q samples, and a control FSM that inspects the timestamp and manages the actual forwarding of the
+stored data to the chip according to the ARM requirements. Hence, the following situations can take
+place:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>Early</strong> case: the samples have arrived to the FPGA before its transmission time. They will
+remain stored in the circular buffer until its transmission time.</p></li>
+<li><p><strong>Late</strong> case: the samples have arrived to the FPGA after its transmission time. The number of
+required samples will be discarded in order to realign the I/Q samples to the current FPGA time.</p></li>
+<li><p><strong>Idle</strong> case: when there is no actual I/Q samples to be transmitted then 0s will be forwarded
+to the DAC.</p></li>
+<li><p><strong>Transmit now</strong> case: when the <strong>64-bit timestamp value received from the ARM is 0</strong> then the
+I/Q samples will be directly forwarded to the DAC chip, thus effectively bypassing the FSM control.</p></li>
+</ul>
+</div></blockquote>
+<p>Whereas typically the provision of samples to the DAC chip would operate at the DAC-clock domain
+(e.g., in the original ADI firmware), the timestamped DAC chain will force the operation of the
+timestamping logic and that interconnected to it (e.g., ADI DAC-related blocks) at the DMA-clock
+domain (i.e., AXI clock). This design decision enables the creation of time-gaps during the provision
+of DAC samples which is necessary to properly manage the <em>late</em> situations. This block interfaces
+the DAC DMA engine in order to enable the inspection of the ARM-inserted timestamp and controls the
+timed IQ-data forwarding to the DAC.</p>
+<p>7. <strong>DAC-chain AXI-based control-signal generation</strong> (<em>dac_control_s_axi_aclk</em>): in AD936x-based
+systems, taking into account the requirement of the customized timestamped DAC-chain to enable
+operation of all DAC-related blocks at the DMA-clock domain (i.e., AXI/ARM-derived clock), this
+block will generate the requried DAC enable/valid signals to get rid of the original 1/N timing
+(<em>although not necessary, for those cases where the ratio between the FPGA-received clock and the
+sampling one is 1 this block can be safely used</em>).</p>
+<p>8. <strong>Configurable decimation block</strong> (<em>rfdc_adc_data_decim_and_depack</em>): in RFSoC-based systems,
+this block will implement a configurable decimation between x8 (from <em>245.76 MHz</em> to <em>30.72 MHz</em>
+[20 MHz BW in 4G/5G systems]) and x128 (from <em>245.76 MHz</em> to <em>1.92 MHz</em> [1.4 MHz BW in 4G
+systems]). Moreover, the block will handle the unpacking of the I/Q data samples coming from the
+RFdc IP core in order to provide a dedicated 16-bit output I and Q signals. Finally, an MMCM is
+utilized by this block to generate the required baseband sampling frequencies, which will then be
+shared with the DAC chain; nevertheless, it needs to be accounted that MMCMs can only synthesize
+frequencies down to 6.25 MHz and, hence, a BUFGCE_DIV primitive will also be used to generate those
+clocks below this value. Moreover, the locked status signal of the MMCM will be used as clock-enable
+input to the BUFGCE_DIV in order to avoid forwarding a non-stable baseband clock.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/rfdc_decim_IP_design.png"><img alt="Configurable ADC-path decimation logic interfacing the RFdc IP core." src="../_images/rfdc_decim_IP_design.png" style="width: 800px;" /></a>
+</div></blockquote>
+<p>9. <strong>Configurable interpolation block</strong> (<em>rfdc_dac_data_interp_and_pack</em>): in RFSoC-based systems,
+this block will implement a configurable interpolation between x8 (from <em>30.72 MHz</em> [20 MHz BW in
+4G/5G systems] to <em>245.76 MHz</em>) and x128 (from <em>1.92 MHz</em> [1.4 MHz BW in 4G systems] to <em>245.76 MHz</em>);
+additionally a final low-pass filter can be used to provide a cleaner signal to the DAC. Moreover,
+the block will handle the packing of the dedicated 16-bit input I and Q signals as required by the
+RFdc IP core.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/rfdc_interp_IP_design.png"><img alt="Configurable DAC-path interpolation logic interfacing the RFdc IP core." src="../_images/rfdc_interp_IP_design.png" style="width: 800px;" /></a>
+</div></blockquote>
+<div class="section" id="timestamping-dma-packet-headers">
+<h3>Timestamping DMA-packet headers<a class="headerlink" href="#timestamping-dma-packet-headers" title="Permalink to this headline">¶</a></h3>
+<p>Essential control information is exchanged between the FPGA and the ARM through metadata inserted
+in the headers of the DMA packets travelling the ADC and DAC channels. Specifically, each DMA packet
+generated by the timestamping logic in the ADC and DAC chains will be preceded by a 8-sample header
+organized as follows (e.g., if a 1000-sample buffer is created for the ADC DMA channel, then each DMA
+packet will contain 992 I/Q samples and a 8-sample header):</p>
+<ol class="arabic simple">
+<li><p><strong>1st 32-bit word:</strong> known PS-FPGA synchronization word <em>0xbbbbaaaa</em>.</p></li>
+<li><p><strong>2nd 32-bit word:</strong> known PS-FPGA synchronization word <em>0xddddcccc</em>.</p></li>
+<li><p><strong>3rd 32-bit word:</strong> known PS-FPGA synchronization word <em>0xffffeeee</em>.</p></li>
+<li><p><strong>4th 32-bit word:</strong> known PS-FPGA synchronization word <em>0xabcddcba</em>.</p></li>
+<li><p><strong>5th 32-bit word:</strong> known PS-FPGA synchronization word <em>0xfedccdef</em>.</p></li>
+<li><p><strong>6th 32-bit word:</strong> known PS-FPGA synchronization word <em>0xdfcbaefd</em>.</p></li>
+<li><p><strong>7th 32-bit word:</strong> 32 LSBs of the timestamp associated with the current DMA packet; lower 32-bits of the 64-bit timestamp value providing: i) information forwarded to the ARM regarding the current time at the FPGA for the first sample in the DMA packet for the ADC case (i.e., number of ADC samples since the last reset) or ii) the requested time of transmission for the first sample of the packet for the DAC case (i.e., offset with respect to the current FPGA time when the ARM expects the samples to arrive at the DAC chip).</p></li>
+<li><p><strong>8th 32-bit word:</strong> 32 MSBs of the timestamp associated with the current DMA packet; upper 32-bits of the 64-bit timestamp value from/to the ARM processor.</p></li>
+</ol>
+</div>
+<div class="section" id="user-definable-parameters">
+<h3>User-definable parameters<a class="headerlink" href="#user-definable-parameters" title="Permalink to this headline">¶</a></h3>
+<p>A set of parameters can be defined/modified by the user (setting the desired value either by manually instantiating
+the IPs in the HDL top-level file or through the related Vivado GUI in the block design view) and are essential to the
+correct behavior of the timestamping solution:</p>
+<dl>
+<dt>1 . <strong>ADC timestamping</strong> (<em>adc_fifo_timestamp_enabler</em>): the following parameters are available</dt><dd><ul class="simple">
+<li><p><strong>PARAM_DMA_LENGTH_WIDTH</strong> <em>[integer; default ‘24’]</em> defines the width in bits of the transfer length control register in
+<a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_dmac">High-Speed DMA Controller Peripheral</a>
+; this value effectively limits the maximum length of the transfers to 2^DMA_LENGTH_WIDTH (e.g., 2^24 = 16M). It is
+essential that this value coincides with the one in <em>adc_dmac_xlength_sniffer</em> and <em>ADC_DMA_packet_controller</em>.</p></li>
+<li><p><strong>BYPASS</strong> <em>[boolean; default ‘false’]</em> indicates whether the block is bypassed or not. It is included to facilitate the implementation of an (functionally-wise) unmodified version of the baseline ADI firmware</p></li>
+<li><p><strong>PARAM_TWO_ANTENNA_SUPPORT</strong> <em>[boolean; default ‘false’]</em> defines wether <em>adc_X_2/3</em> ports are active or not.</p></li>
+<li><p><strong>PARAM_x1_FPGA_SAMPLING_RATIO</strong> <em>[boolean; default ‘false’]</em> efines whether the baseband FPGA clock (ADCxN_clk) has an actual x1 ratio to the sampling clock or not. <strong>IMPORTANT:</strong> both pluto and antsdr require this parameter to be set to true, whereas zcu102 needs it to be set to false.</p></li>
+</ul>
+</dd>
+<dt>2 . <strong>DMA packet size sniffer (ADC chain)</strong> (<em>adc_dmac_xlength_sniffer</em>): the following parameters are available</dt><dd><ul class="simple">
+<li><p><strong>DMA_LENGTH_WIDTH</strong> <em>[integer; default ‘24’]</em> defines the width in bits of the transfer length control register in</p></li>
+</ul>
+<p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_dmac">High-Speed DMA Controller Peripheral</a>
+; this value effectively limits the maximum length of the transfers to 2^DMA_LENGTH_WIDTH (e.g., 2^24 = 16M). It is
+essential that this value coincides with the one in <em>adc_fifo_timestamp_enabler</em> and <em>ADC_DMA_packet_controller</em></p>
+</dd>
+<dt>3 . <strong>ADC DMA packet forwarding controller</strong> (<em>ADC_DMA_packet_controller</em>): the following parameters are available</dt><dd><p><strong>DMA_LENGTH_WIDTH</strong> <em>[integer; default ‘24’]</em> defines the width in bits of the transfer length control register in
+<a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_dmac">High-Speed DMA Controller Peripheral</a>
+; this value effectively limits the maximum length of the transfers to 2^DMA_LENGTH_WIDTH (e.g., 2^24 = 16M). It is
+essential that this value coincides with the one in <em>adc_fifo_timestamp_enabler</em> and <em>adc_dmac_xlength_sniffer</em>.</p>
+</dd>
+<dt>4 . <strong>DAC timestamping</strong> (<em>dac_fifo_timestamp_enabler</em>): the following parameters are available</dt><dd><ul class="simple">
+<li><p><strong>DMA_LENGTH_WIDTH</strong> <em>[integer; default ‘24’]</em> defines the width in bits of the transfer length control register in</p></li>
+</ul>
+<p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_dmac">High-Speed DMA Controller Peripheral</a>
+; this value effectively limits the maximum length of the transfers to 2^DMA_LENGTH_WIDTH (e.g., 2^24 = 16M). It is
+essential that this value coincides with the one in <em>dac_dmac_xlength_sniffer</em>.
+- <strong>BYPASS</strong> <em>[boolean; default ‘false’]</em> indicates whether the block is bypassed or not. It is included to facilitate the implementation of an (functionally-wise) unmodified version of the baseline ADI firmware
+- <strong>BUFFER_LENGTH</strong> <em>[integer; default ‘8’]</em> defines the length of the internal circular buffer. The length is defined in number of subframes <em>&#64;1.92 MHz</em> (i.e., number of 2048x32 memories that will be implemented); the <em>valid values are in the range [4..10]</em> (i.e., values below 4 will still generate 4 memories and values above 10 will still generate 10 memories).
+- <strong>MAX_DMA_PACKET_LENGTH</strong> <em>[integer; default ‘16000’]</em> defines the maximum supported DMA packet length, which can be stored in a single element of the circular buffer (i.e. it effectively defines the number of RAM blocks implemented per each element of the circular buffer).
+- <strong>PARAM_DMA_LENGTH_IN_HEADER</strong> <em>[boolean; default ‘false’]</em> indicates whether the DMA packet size is received as part of a packet header itself (‘true’) or received on the input ports (‘false’). <strong>IMPORTANT:</strong> must be disabled when ADI DMA engines are used (in this repo, this applies to all supported boards).
+- <strong>PARAM_TWO_ANTENNA_SUPPORT</strong> <em>[boolean; default ‘false’]</em> indicates whether the design has to be synthesized to support two transmit antennas or not.
+- <strong>PARAM_x1_FPGA_SAMPLING_RATIO</strong> <em>[boolean; default ‘false’]</em> defines whether the baseband FPGA clock (DACxN_clk) has an actual x1 ratio to the sampling clock or not. <em>NOTE: both pluto and antsdr require this parameter to be set to true, whereas zcu102 needs it to be set to false.</em>
+- <strong>PARAM_MEM_TYPE</strong> <em>[string; default ‘ramb36e2]</em> indicates the memory instantiation type; supported types <em>ramb36e2</em> (Ultrascale), <em>ramb36e1</em> (7 series).</p>
+</dd>
+<dt>5 . <strong>DMA packet size sniffer (DAC chain)</strong> (<em>dac_dmac_xlength_sniffer</em>): the following parameters are available</dt><dd><ul class="simple">
+<li><p><strong>DMA_LENGTH_WIDTH</strong> <em>[integer; default ‘24’]</em> defines the width in bits of the transfer length control register in
+<a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_dmac">High-Speed DMA Controller Peripheral</a>
+; this value effectively limits the maximum length of the transfers to 2^DMA_LENGTH_WIDTH (e.g., 2^24 = 16M). It is
+essential that this value coincides with the one in <em>dac_fifo_timestamp_enabler</em>.</p></li>
+</ul>
+</dd>
+</dl>
+<p>6 . <strong>Configurable decimation block</strong> (<em>rfdc_adc_data_decim_and_depack</em>): the following parameters are available</p>
+<dl class="simple">
+<dt>7 . <strong>Configurable interpolation block</strong> (<em>rfdc_dac_data_interp_and_pack</em>): the following parameters are available</dt><dd><ul class="simple">
+<li><p><strong>PARAM_OUT_CLEANING_FIR</strong> <em>[boolean; default ‘false’]</em> indicates if a low-pass filter is added at the end to clean the output signal (‘true’) or not (‘false’).</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="plutosdr_project.html" class="btn btn-neutral float-right" title="ADALM-PLUTO project build" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../index.html" class="btn btn-neutral float-left" title="SRS Zynq timestamping solution" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Software Radio Systems.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-140380699-2', 'auto');
+    
+    ga('send', 'pageview');
+    </script>
+
+    
+   
+
+</body>
+</html>

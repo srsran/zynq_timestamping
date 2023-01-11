@@ -1,0 +1,697 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Application Note: Petalinux build, software cross-compilation and Tx-Rx testing with the ZCU102 and ZCU111 platforms &mdash; zynq_timestamping  1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ADC DMA packet controller" href="../rtl_module/adc_dma_packet_controller.html" />
+    <link rel="prev" title="Application Note: Tx-Rx testing with ADALM-PLUTO" href="plutosdr.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #ffffff" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Main page</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">SRS Zynq timestamping solution</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FPGA projects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../bitstream/overview.html">Overview of the Zynq timestamping solution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bitstream/plutosdr_project.html">ADALM-PLUTO project build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bitstream/antsdr_project.html">MicroPhase AntSDR project build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bitstream/zcu102_project.html">ZCU102 project build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bitstream/zcu111_project.html">ZCU111 project build</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Application notes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="antsdr.html">Application Note: End-to-End 4G testing with AntSDR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plutosdr.html">Application Note: Tx-Rx testing with ADALM-PLUTO</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Application Note: Petalinux build, software cross-compilation and Tx-Rx testing with the ZCU102 and ZCU111 platforms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hardware-and-software-requirements">Hardware and Software Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-the-binaires-for-arm-and-preparing-a-bootable-sd-card">Building the binaires for ARM and preparing a bootable SD card</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#building-petalinux-2019-2">Building Petalinux 2019.2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preparing-the-sd-card">Preparing the SD card</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#compiling-a-customized-linux-kernel-from-source-code">Compiling a customized Linux kernel from source code</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#default-xilinx-kernel">Default Xilinx kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analog-devices-kernel">Analog Devices kernel</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#compiling-a-custom-linux-kernel-driver">Compiling a custom Linux kernel driver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modifying-evicetree">Modifying evicetree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cross-compiling-the-zynq-timestamping-library-and-tx-rx-example-application">Cross-compiling the Zynq timestamping library and Tx-Rx example application</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#running">Running</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">RTL modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rtl_module/adc_dma_packet_controller.html">ADC DMA packet controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rtl_module/adc_dmac_xlength_sniffer.html">ADC DMAC xlength sniffer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rtl_module/adc_fifo_timestamp_enabler.html">ADC FIFO timestamp enabler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rtl_module/adc_timestamp_enabler_packetizer.html">ADC timestamp enabler packetizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rtl_module/dac_dmac_xlength_sniffer.html">DAC DMAC xlength sniffer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rtl_module/dac_fifo_timestamp_enabler.html">DAC FIFO timestamp enabler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rtl_module/dma_depack_channels.html">DMA depack channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rtl_module/timestamp_unit_lclk_count.html">Timestamp unit lclk count</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rtl_module/rfdc_adc_data_decim_and_depack.html">RFDC ADC data interp and pack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rtl_module/rfdc_dac_data_interp_and_pack.html">RFDC dac data decim and depack</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">zynq_timestamping </a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Application Note: Petalinux build, software cross-compilation and Tx-Rx testing with the ZCU102 and ZCU111 platforms</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/srsran/zynq_timestamping/blob/main/doc/app/zcu.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="application-note-petalinux-build-software-cross-compilation-and-tx-rx-testing-with-the-zcu102-and-zcu111-platforms">
+<span id="zcu"></span><h1>Application Note: Petalinux build, software cross-compilation and Tx-Rx testing with the ZCU102 and ZCU111 platforms<a class="headerlink" href="#application-note-petalinux-build-software-cross-compilation-and-tx-rx-testing-with-the-zcu102-and-zcu111-platforms" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<img alt="System" src="../_images/app_note_zcu.png" />
+</div>
+<div class="section" id="hardware-and-software-requirements">
+<h2>Hardware and Software Requirements<a class="headerlink" href="#hardware-and-software-requirements" title="Permalink to this headline">¶</a></h2>
+<p>For this application note, the following hardware and software will be used:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Dell XPS13 with Ubuntu 20.04.4</p></li>
+<li><p>Xilinx Zynq UltraScale+ MPSoC ZCU102/RFSoC ZCU111 Evaluation Kit with custom SRS bitstream and Petalinux 2019.2</p></li>
+<li><p>srsRAN</p></li>
+<li><p>SRS Zynq timestamping</p></li>
+<li><p>Analog Devices libiio and libad9361 software libraries (ZCU102 only)</p></li>
+</ol>
+</div></blockquote>
+</div>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>1. You need to generate the custom SRS timestamp bitstream and to load it in the board (see the
+<a class="reference internal" href="../bitstream/zcu102_project.html#zcu102-project"><span class="std std-ref">ZCU102 project build</span></a>
+or the
+<a class="reference internal" href="../bitstream/zcu111_project.html#zcu111-project"><span class="std std-ref">ZCU111 project build</span></a>
+section for more details).</p>
+</div>
+<div class="section" id="building-the-binaires-for-arm-and-preparing-a-bootable-sd-card">
+<h2>Building the binaires for ARM and preparing a bootable SD card<a class="headerlink" href="#building-the-binaires-for-arm-and-preparing-a-bootable-sd-card" title="Permalink to this headline">¶</a></h2>
+<p>Before you can build srsRAN or your custom SDR application binaries targeting the ARM embedded in
+the MPSoC/RFSoC device, you’ll need to setup a toolchain and a minimal sysroot suitable for the
+cross-compilation of the Zynq timestamping software.</p>
+<p>In this Application Note it is described the build and utilization of Petalinux, as it provides an
+easy and convenient command-line interface which allows building bootfiles, a rootfilesystem and a
+complete SDK (i.e., toolchain + target sysroot) suitable for cross-compilation. It should also be
+perfectly possible to use Yocto tools directly, or another build-system (e.g., buildroot) if you
+should prefer so, but it is out of the scope of this Application Note.</p>
+<div class="section" id="building-petalinux-2019-2">
+<h3>Building Petalinux 2019.2<a class="headerlink" href="#building-petalinux-2019-2" title="Permalink to this headline">¶</a></h3>
+<p>The Petalinux project is based on the exported hardware configuration files of the Vivado project
+implemented as part of the prerequisites. Once the project is implemented, make sure to export the
+hardware configuration and bitstream as described below:</p>
+<ol class="arabic simple">
+<li><p>From the lateral <em>IMPLEMENTATION</em> menu select <em>Open Implemented Design</em></p></li>
+<li><p>From the <em>File</em> select <em>Export -&gt; Export Hardware…</em></p></li>
+<li><p>Check <em>Include bistream</em></p></li>
+<li><p>In <em>Export to</em> select the <em>sdk</em> subfolder of the Vivado project (_VIVADO_PROJECT_PATH_/_VIVADO_PROJECT_NAME_.sdk)</p></li>
+</ol>
+<p>The following steps are required to build Petalinux:</p>
+<p>1. Download the BSP for
+<a class="reference external" href="https://www.xilinx.com/member/forms/download/xef.html?filename=xilinx-zcu102-v2019.2-final.bsp">ZCU102</a>
+or
+<a class="reference external" href="https://www.xilinx.com/member/forms/download/xef.html?filename=xilinx-zcu111-v2019.2-final.bsp">ZCU111</a>
+for  for Vivado 2019.2.</p>
+<p>2. Download the
+<a class="reference external" href="https://www.xilinx.com/member/forms/download/xef.html?filename=petalinux-v2019.2-final-installer.run">Petalinux SDK for Vivado 2019.2</a>.</p>
+<p>3. Check the documentation and verify that all dependencies are installed. The following command
+can be used to install dependencies in Ubuntu 20.04:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="p">&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python<span class="w"> </span>tofrodos<span class="w"> </span>iproute2<span class="w"> </span>gawk<span class="w"> </span>xvfb<span class="w"> </span>gcc<span class="w"> </span>git<span class="w"> </span>make<span class="w"> </span>net-tools<span class="w"> </span>libncurses5-dev<span class="w"> </span>tftpd<span class="w"> </span>zlib1g-dev<span class="w"> </span>libssl-dev<span class="w"> </span>flex<span class="w"> </span>bison<span class="w"> </span>libselinux1<span class="w"> </span>gnupg<span class="w"> </span>wget<span class="w"> </span>diffstat<span class="w"> </span>chrpath<span class="w"> </span>socat<span class="w"> </span>xterm<span class="w"> </span>autoconf<span class="w"> </span>libtool<span class="w"> </span>tar<span class="w"> </span>unzip<span class="w"> </span>texinfo<span class="w"> </span>zlib1g-dev<span class="w"> </span>gcc-multilib<span class="w"> </span>build-essential<span class="w"> </span>libsdl1.2-dev<span class="w"> </span>libglib2.0-dev<span class="w"> </span>zlib1g:i386<span class="w"> </span>screen<span class="w"> </span>pax
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Install the Petalinux Tools:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./petalinux-v2019.2-final-installer.run<span class="w"> </span>_INSTALL_PATH_/petalinux_sdk_2019.2
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>Create a folder to build Petalinux 2019.2 (e.g., <em>_PETALINUX_</em>).</p></li>
+<li><p>Run the following commands (from <em>_PETALINUX_</em> build folder):</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>_INSTALL_PATH_/petalinux_sdk_2019.2/settings.sh
+</pre></div>
+</div>
+<p>In case of problems with bash see the following
+<a class="reference external" href="https://forums.xilinx.com/t5/Embedded-Linux/Petalinux-settings-sh-problem/td-p/567202">Xilinx forum post</a>
+.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>petalinux-create<span class="w"> </span>-t<span class="w"> </span>project<span class="w"> </span>-s<span class="w"> </span>xilinx-zcu111-v2019.2-final.bsp
+<span class="nb">cd</span><span class="w"> </span>xilinx-zcu111-2019.2/
+</pre></div>
+</div>
+<ol class="arabic simple" start="7">
+<li><p>Load the hardware description (generated from Vivado):</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>petalinux-config<span class="w"> </span>--get-hw-description<span class="w"> </span>_VIVADO_PROJECT_PATH_/_VIVADO_PROJECT_NAME_.sdk
+</pre></div>
+</div>
+<ol class="arabic simple" start="8">
+<li><p>A configuration menu pops up, verify the following configs and do any required changes, then save &amp; exit:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>.<span class="w"> </span>Subsystem<span class="w"> </span>AUTO<span class="w"> </span>Hardware<span class="w"> </span>Settings<span class="w"> </span>-&gt;
+<span class="w">    </span>..<span class="w"> </span>Advanced<span class="w"> </span>bootable<span class="w"> </span>images<span class="w"> </span>storage<span class="w"> </span>Settings<span class="w"> </span>-&gt;
+<span class="w">        </span>*<span class="w"> </span>boot<span class="w"> </span>image<span class="w"> </span>settings<span class="w">    </span>-&gt;<span class="w"> </span>image<span class="w"> </span>storage<span class="w"> </span>media<span class="w"> </span>-&gt;<span class="w"> </span>primary<span class="w"> </span>sd
+<span class="w">        </span>*<span class="w"> </span>kernel<span class="w"> </span>image<span class="w"> </span>settings<span class="w">  </span>-&gt;<span class="w"> </span>image<span class="w"> </span>storage<span class="w"> </span>media<span class="w"> </span>-&gt;<span class="w"> </span>primary<span class="w"> </span>sd
+<span class="w">                                 </span>-&gt;<span class="w"> </span>image<span class="w"> </span>name<span class="w"> </span>-&gt;<span class="w"> </span>Image
+<span class="w">        </span>*<span class="w"> </span>dtb<span class="w"> </span>image<span class="w"> </span>settings<span class="w">     </span>-&gt;<span class="w"> </span>image<span class="w"> </span>storage<span class="w"> </span>media<span class="w"> </span>-&gt;<span class="w"> </span>primary<span class="w"> </span>sd
+<span class="w">    </span>..<span class="w"> </span>Flash<span class="w"> </span>settings<span class="w"> </span>-&gt;<span class="w"> </span>***<span class="w"> </span>partition<span class="w"> </span><span class="m">3</span><span class="w"> </span>***<span class="w"> </span>-&gt;<span class="w"> </span><span class="nb">set</span><span class="w"> </span>name<span class="w"> </span><span class="s1">&#39;spare&#39;</span>
+.<span class="w"> </span>Image<span class="w"> </span>Packaging<span class="w"> </span>Configuration<span class="w"> </span>-&gt;
+<span class="w">    </span>..<span class="w"> </span>Root<span class="w"> </span>filesystem<span class="w"> </span><span class="nb">type</span><span class="w"> </span>-&gt;<span class="w"> </span>SD<span class="w"> </span>card
+<span class="w">    </span>..<span class="w"> </span>Device<span class="w"> </span>node<span class="w"> </span>of<span class="w"> </span>SD<span class="w"> </span>device<span class="w"> </span>-&gt;<span class="w"> </span>/dev/mmcblk0p2
+<span class="w">    </span>..<span class="w"> </span>name<span class="w"> </span><span class="k">for</span><span class="w"> </span>bootable<span class="w"> </span>kernel<span class="w"> </span>image<span class="w"> </span>-&gt;<span class="w"> </span>Image
+.<span class="w"> </span>Yocto<span class="w"> </span>Settings<span class="w"> </span>-&gt;
+<span class="w">    </span>..<span class="w"> </span>Enable<span class="w"> </span>Debug<span class="w"> </span>Tweaks
+<span class="w">    </span>..<span class="w"> </span>Parallel<span class="w"> </span>thread<span class="w"> </span>execution<span class="w"> </span>-&gt;<span class="w"> </span><span class="nb">set</span><span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>bb<span class="w"> </span>trheads<span class="w"> </span>-&gt;<span class="w"> </span><span class="m">4</span>
+<span class="w">                                 </span>-&gt;<span class="w"> </span><span class="nb">set</span><span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>parallel<span class="w"> </span>make<span class="w"> </span>-j<span class="w"> </span>-&gt;<span class="w"> </span><span class="m">4</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="9">
+<li><p>Configure the kernel:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>petalinux-config<span class="w"> </span>-c<span class="w"> </span>kernel
+</pre></div>
+</div>
+<p><strong>Important note:</strong> in the Zynq timestamping solution for the ZCU111 board a customized kernel is
+built from source code, while adding a custom kernel module. The full instructions for this are
+provided below. We advise you to first always build the kernel through the Petalinux tools, and to
+validate that it works well and is properly configured (e.g., it has all necessary modules), before
+proceeding to build a customized kernel.</p>
+<ol class="arabic simple" start="10">
+<li><p>A configuration menu pops up, verify the following configs and do any required changes, then save &amp; exit:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>.<span class="w"> </span>CPU<span class="w"> </span>Power<span class="w"> </span>Management<span class="w"> </span>-&gt;<span class="w"> </span>CPU<span class="w"> </span>Idle<span class="w"> </span>-&gt;<span class="w"> </span>disable<span class="w"> </span>CPU<span class="w"> </span>idle<span class="w"> </span>PM<span class="w"> </span>support
+</pre></div>
+</div>
+<ol class="arabic simple" start="11">
+<li><p>Configure the rootfs:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>petalinux-config<span class="w"> </span>-c<span class="w"> </span>rootfs
+</pre></div>
+</div>
+<ol class="arabic simple" start="12">
+<li><p>A configuration menu pops up, add the following modules, then save &amp; exit:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>.<span class="w"> </span>Filesystem<span class="w"> </span>Packages
+<span class="w">    </span>..<span class="w"> </span>base<span class="w"> </span>-&gt;<span class="w"> </span><span class="k">select</span><span class="w"> </span>i2c-tools
+<span class="w">    </span>..<span class="w"> </span>console<span class="w"> </span>-&gt;<span class="w"> </span>network<span class="w"> </span>-&gt;<span class="w"> </span>dropbear<span class="w"> </span>-&gt;<span class="w"> </span><span class="k">select</span><span class="w"> </span>dropbear
+<span class="w">    </span>..<span class="w"> </span>devel<span class="w"> </span>-&gt;<span class="w"> </span>python<span class="w"> </span>-&gt;<span class="w"> </span>python<span class="w"> </span>-&gt;<span class="w"> </span><span class="k">select</span><span class="w"> </span>all<span class="w"> </span>modules
+<span class="w">                          </span>python-numpy<span class="w"> </span>-&gt;<span class="w"> </span><span class="k">select</span><span class="w"> </span>python-numpy
+<span class="w">    </span>..<span class="w"> </span>libs<span class="w"> </span>-&gt;<span class="w"> </span>libmetal<span class="w"> </span>-&gt;<span class="w"> </span><span class="k">select</span><span class="w"> </span>all<span class="w"> </span>modules
+<span class="w">               </span>libgcrypt<span class="w"> </span>-&gt;<span class="w"> </span><span class="k">select</span><span class="w"> </span>all<span class="w"> </span>modules
+<span class="w">               </span>network<span class="w"> </span>-&gt;<span class="w"> </span>openssl<span class="w"> </span>-&gt;<span class="w"> </span><span class="k">select</span><span class="w"> </span>all<span class="w"> </span>modules
+<span class="w">    </span>..<span class="w"> </span>misc<span class="w"> </span>-&gt;<span class="w"> </span>gdb<span class="w"> </span>-&gt;<span class="w"> </span><span class="k">select</span><span class="w"> </span>all<span class="w"> </span>modules
+<span class="w">               </span>python3<span class="w"> </span>-&gt;<span class="w"> </span><span class="k">select</span><span class="w"> </span>all<span class="w"> </span>modules
+<span class="w">               </span>python3-async<span class="w"> </span>-&gt;<span class="w"> </span><span class="k">select</span><span class="w"> </span>python3-async
+<span class="w">               </span>python3-setuptools<span class="w"> </span>-&gt;<span class="w"> </span><span class="k">select</span><span class="w"> </span>python3-setuptools
+.<span class="w"> </span>Petalinux<span class="w"> </span>Package<span class="w"> </span>Groups
+<span class="w">    </span>..<span class="w"> </span>packagegroup-petalinux<span class="w"> </span>-&gt;<span class="w"> </span><span class="k">select</span><span class="w"> </span>all<span class="w"> </span>modules
+</pre></div>
+</div>
+<p>For the ZCU111 build case, no extra dependencies should be needed to cross-compile the Zynq timestamping
+software and txrx example application; for ZCU102 the libiio libraries are required and, hence, they need
+to be included in the rootfs and SDK (this is out of the scope of this Application note, but instructions
+can be found in the
+<a class="reference external" href="https://github.com/analogdevicesinc/meta-adi/tree/2019_R2/meta-adi-xilinx">META-ADI-XILINX</a>
+repository). In case you want to cross-compile the entire srsRAN software suite and test more complex
+applications, you would also need to add the extra dependencies into <em>project-spec/meta-user/recipes-core/images/petalinux-user-image.bbappend</em>
+as detailed:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">IMAGE_INSTALL_append</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;\</span>
+<span class="s2">                       boost \</span>
+<span class="s2">                       boost-dev \</span>
+<span class="s2">                       mbedtls \</span>
+<span class="s2">                       mbedtls-dev \</span>
+<span class="s2">                       libfftw \</span>
+<span class="s2">                       libfftwf \</span>
+<span class="s2">                       pcsc-lite \</span>
+<span class="s2">                       pcsc-lite-dev \</span>
+<span class="s2">                       lksctp-tools \</span>
+<span class="s2">                       lksctp-tools-withsctp \</span>
+<span class="s2">                       lksctp-tools-dev \</span>
+<span class="s2">                     &quot;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="13">
+<li><p>Finally, to build Petalinux and package the generated rootsystem:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>petalinux-build
+petalinux-build<span class="w"> </span>--sdk
+petalinux-package<span class="w"> </span>--sysroot
+</pre></div>
+</div>
+<p>In case of problems see the following
+<a class="reference external" href="https://forums.xilinx.com/t5/Embedded-Linux/PetaLinux-build-fails-with-locale-errors-How-to-disable-locale/m-p/894431/highlight/false#M28960">Xilinx forum post</a>
+.</p>
+<p>The files resulting from the commands above will be left at <em>_PETALINUX_/xilinx-zcu111-2019.2/images/linux</em></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>petalinux-package<span class="w"> </span>--boot<span class="w"> </span>--format<span class="w"> </span>BIN<span class="w"> </span>--fsbl<span class="w"> </span>images/linux/zynqmp_fsbl.elf<span class="w"> </span>--u-boot<span class="w"> </span>images/linux/u-boot.elf<span class="w"> </span>--pmufw<span class="w"> </span>images/linux/pmufw.elf<span class="w"> </span>--fpga<span class="w"> </span>_VIVADO_PROJECT_PATH_/_VIVADO_PROJECT_NAME_.runs/impl_1/design_1_wrapper.bit<span class="w"> </span>--force
+</pre></div>
+</div>
+</div>
+<div class="section" id="preparing-the-sd-card">
+<h3>Preparing the SD card<a class="headerlink" href="#preparing-the-sd-card" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Create 2 partitions in the SD card:</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>BOOT</strong>, 1 GB, FAT32, primary</p></li>
+<li><p><strong>rootfs</strong>, remaining space, ext4, primary</p></li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Copy the following files to the BOOT partition of the SD card:</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>BOOT.BIN (from <em>_PETALINUX_/xilinx-zcu111-2019.2/images/linux</em>)</p></li>
+<li><p>Image (from <em>_PETALINUX_/xilinx-zcu111-2019.2/images/linux</em>)</p></li>
+<li><p>system.dtb (from <em>_PETALINUX_/xilinx-zcu111-2019.2/images/linux</em>)</p></li>
+<li><p>uEnv.txt (you can find an example in the repository under <em>/projects/zcu1XX/bootfiles/</em>)</p></li>
+</ul>
+</div></blockquote>
+<p>3. Deploy rootfs in the ext4 partition of the SD card (the compressed rootfs file is located at
+<em>_PETALINUX_/xilinx-zcu111-2019.2/images/linux</em>):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>tar<span class="w"> </span>xvf<span class="w"> </span>rootfs.tar.gz<span class="w"> </span>-C<span class="w"> </span>_PATH_TO_MOUNTED_SD_CARD_/rootfs
+</pre></div>
+</div>
+</div>
+<div class="section" id="compiling-a-customized-linux-kernel-from-source-code">
+<h3>Compiling a customized Linux kernel from source code<a class="headerlink" href="#compiling-a-customized-linux-kernel-from-source-code" title="Permalink to this headline">¶</a></h3>
+<p>Once you have verified that you can successfully boot the board using an SD card prepared as detailed
+above, you can replace the Linux kernel with a customized one compiled from source code (this approach
+seems more convenient when compilation of out-of-tree Linux kernel modules is required). Follow the
+instructions below for two different kernel sources.</p>
+<div class="section" id="default-xilinx-kernel">
+<h4>Default Xilinx kernel<a class="headerlink" href="#default-xilinx-kernel" title="Permalink to this headline">¶</a></h4>
+<p>Get the source code from Xilinx GitHub:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Xilinx/linux-xlnx.git
+<span class="nb">cd</span><span class="w"> </span>linux-xlnx
+git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>xilinx-v2019.2.01<span class="w"> </span>tags/xilinx-v2019.2.01
+<span class="nb">export</span><span class="w"> </span><span class="nv">ARCH</span><span class="o">=</span>arm64<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">CROSS_COMPILE</span><span class="o">=</span>aarch64-linux-gnu-
+</pre></div>
+</div>
+<p>Take the configuration from a running kernel:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>scp<span class="w"> </span>-r<span class="w"> </span>root@&lt;zcu111-ip-address&gt;:/proc/config.gz<span class="w"> </span>.
+zcat<span class="w"> </span>config.gz<span class="w"> </span>&gt;<span class="w"> </span>.config
+</pre></div>
+</div>
+<p>Configure the kernel:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">ARCH</span><span class="o">=</span>arm64<span class="w"> </span>oldconfig
+</pre></div>
+</div>
+<p>Cross-compile the kernel and modules:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">ARCH</span><span class="o">=</span>arm64<span class="w"> </span><span class="nv">CROSS_COMPILE</span><span class="o">=</span>aarch64-linux-gnu-<span class="w"> </span>-j8<span class="w"> </span>Image<span class="w"> </span><span class="nv">UIMAGE_LOADADDR</span><span class="o">=</span>0x8000
+mkdir<span class="w"> </span>compiled_modules
+make<span class="w"> </span><span class="nv">ARCH</span><span class="o">=</span>arm64<span class="w"> </span><span class="nv">CROSS_COMPILE</span><span class="o">=</span>aarch64-linux-gnu-<span class="w"> </span>-j8<span class="w"> </span><span class="nv">INSTALL_MOD_PATH</span><span class="o">=</span>./compiled_modules<span class="w"> </span>modules
+make<span class="w"> </span><span class="nv">ARCH</span><span class="o">=</span>arm64<span class="w"> </span><span class="nv">CROSS_COMPILE</span><span class="o">=</span>aarch64-linux-gnu-<span class="w"> </span>-j8<span class="w"> </span><span class="nv">INSTALL_MOD_PATH</span><span class="o">=</span>./compiled_modules<span class="w"> </span>modules_install
+</pre></div>
+</div>
+<p>Copy the <em>Image</em> file from <em>arch/arm64/boot/</em> to the BOOT partition of the SD card. Copy the modules
+to <em>/lib/modules/</em> in the rootfs partition of the card.</p>
+</div>
+<div class="section" id="analog-devices-kernel">
+<h4>Analog Devices kernel<a class="headerlink" href="#analog-devices-kernel" title="Permalink to this headline">¶</a></h4>
+<p>You can find conveniently detailed instructions, especially for the ZCU102 and FMCOMMS2 pairing, on the
+<a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/linux/zynqmp">Analog Devices Wiki</a>
+.</p>
+</div>
+</div>
+<div class="section" id="compiling-a-custom-linux-kernel-driver">
+<h3>Compiling a custom Linux kernel driver<a class="headerlink" href="#compiling-a-custom-linux-kernel-driver" title="Permalink to this headline">¶</a></h3>
+<p>The source code for the driver required to implement timestamping support in the ZCU111 board can
+be found in a dedicated folder in the Zynq timestamping repository (under
+<em>/sw/lib/src/phy/rf/xrfdc/kernel_module</em>), jointly with its associated <em>Makefile</em>. Note that this
+specific driver is not required for any other of the supported boards.</p>
+<p>Before compiling the custom driver, make sure that you first have compiled the Linux kernel by
+following the instructions provided above. Once all is set, a <em>KDIR</em> variable needs to be defined
+in the <em>Makefile</em> to ensure that it points to the kernel source code directory. The following
+commands must then be executed:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">CROSS_COMPILE</span><span class="o">=</span>aarch64-linux-gnu-
+<span class="nb">export</span><span class="w"> </span><span class="nv">ARCH</span><span class="o">=</span>arm64
+make<span class="w"> </span><span class="nv">ARCH</span><span class="o">=</span>arm64<span class="w"> </span>-j4
+</pre></div>
+</div>
+<p>As a result of its successful compilation a <em>srs_dma_driver.ko</em> file will be generated. This file
+can be used with the previously compiled Linux kernel after booting up the board.</p>
+<p>In order to install the driver in the Linux running in the ZCU111 the <em>srs_dma_driver.ko</em> file needs
+to be transferred to the board. Then execute:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>insmod<span class="w"> </span>srs_dma_driver.ko
+</pre></div>
+</div>
+</div>
+<div class="section" id="modifying-evicetree">
+<h3>Modifying evicetree<a class="headerlink" href="#modifying-evicetree" title="Permalink to this headline">¶</a></h3>
+<p>The custom <em>srs_dma_driver</em> driver obtains information regarding the DMA IPs from the devicetree.
+Hence, the latter must include additional information for this. Below you can see how to define
+the <em>srs_rx_dma</em> and <em>srs_tx_dma</em> nodes that do refer to the specific DMAs used by the Zynq
+timestamping solution (you may also check this in the Vivado project built in earlier steps):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dma@a0060000<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="c1">#dma-cells = &lt;0x01&gt;;</span>
+<span class="w">        </span>clock-names<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;s_axi_lite_aclk\0m_axi_s2mm_aclk&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="nv">clocks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x03<span class="w"> </span>0x47<span class="w"> </span>0x03<span class="w"> </span>0x47&gt;<span class="p">;</span>
+<span class="w">        </span><span class="nv">compatible</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;xlnx,axi-dma-7.1\0xlnx,axi-dma-1.00.a&quot;</span><span class="p">;</span>
+<span class="w">        </span>interrupt-names<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;s2mm_introut&quot;</span><span class="p">;</span>
+<span class="w">        </span>interrupt-parent<span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x04&gt;<span class="p">;</span>
+<span class="w">        </span><span class="nv">interrupts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x00<span class="w"> </span>0x5a<span class="w"> </span>0x04&gt;<span class="p">;</span>
+<span class="w">        </span><span class="nv">reg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x00<span class="w"> </span>0xa0060000<span class="w"> </span>0x00<span class="w"> </span>0x10000&gt;<span class="p">;</span>
+<span class="w">        </span>xlnx,addrwidth<span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x40&gt;<span class="p">;</span>
+<span class="w">        </span><span class="nv">phandle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x37&gt;<span class="p">;</span>
+
+<span class="w">        </span>dma-channel@a0060030<span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="nv">compatible</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;xlnx,axi-dma-s2mm-channel&quot;</span><span class="p">;</span>
+<span class="w">                </span>dma-channels<span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x01&gt;<span class="p">;</span>
+<span class="w">                </span><span class="nv">interrupts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x00<span class="w"> </span>0x5a<span class="w"> </span>0x04&gt;<span class="p">;</span>
+<span class="w">                </span>xlnx,datawidth<span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x40&gt;<span class="p">;</span>
+<span class="w">                </span>xlnx,device-id<span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x00&gt;<span class="p">;</span>
+<span class="w">        </span><span class="o">}</span><span class="p">;</span>
+<span class="o">}</span><span class="p">;</span>
+
+srs_rx_dma<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="nv">compatible</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;srs,txrx_dma&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="nv">dmas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x37<span class="w"> </span>0x00&gt;<span class="p">;</span>
+<span class="w">        </span>dma-names<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;rx&quot;</span><span class="p">;</span>
+<span class="w">        </span>dma-direction<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;rx&quot;</span><span class="p">;</span>
+<span class="w">        </span>dma-coherent<span class="p">;</span>
+<span class="o">}</span><span class="p">;</span>
+
+dma@a0070000<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="c1">#dma-cells = &lt;0x01&gt;;</span>
+<span class="w">        </span>clock-names<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;s_axi_lite_aclk\0m_axi_mm2s_aclk&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="nv">clocks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x03<span class="w"> </span>0x47<span class="w"> </span>0x03<span class="w"> </span>0x47&gt;<span class="p">;</span>
+<span class="w">        </span><span class="nv">compatible</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;xlnx,axi-dma-7.1\0xlnx,axi-dma-1.00.a&quot;</span><span class="p">;</span>
+<span class="w">        </span>interrupt-names<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;mm2s_introut&quot;</span><span class="p">;</span>
+<span class="w">        </span>interrupt-parent<span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x04&gt;<span class="p">;</span>
+<span class="w">        </span><span class="nv">interrupts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x00<span class="w"> </span>0x5b<span class="w"> </span>0x04&gt;<span class="p">;</span>
+<span class="w">        </span><span class="nv">reg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x00<span class="w"> </span>0xa0070000<span class="w"> </span>0x00<span class="w"> </span>0x10000&gt;<span class="p">;</span>
+<span class="w">        </span>xlnx,addrwidth<span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x40&gt;<span class="p">;</span>
+<span class="w">        </span><span class="nv">phandle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x38&gt;<span class="p">;</span>
+
+<span class="w">        </span>dma-channel@a0070000<span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="nv">compatible</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;xlnx,axi-dma-mm2s-channel&quot;</span><span class="p">;</span>
+<span class="w">                </span>dma-channels<span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x01&gt;<span class="p">;</span>
+<span class="w">                </span><span class="nv">interrupts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x00<span class="w"> </span>0x5b<span class="w"> </span>0x04&gt;<span class="p">;</span>
+<span class="w">                </span>xlnx,datawidth<span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x20&gt;<span class="p">;</span>
+<span class="w">                </span>xlnx,device-id<span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x01&gt;<span class="p">;</span>
+<span class="w">        </span><span class="o">}</span><span class="p">;</span>
+<span class="o">}</span><span class="p">;</span>
+
+srs_tx_dma<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="nv">compatible</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;srs,txrx_dma&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="nv">dmas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;0x38<span class="w"> </span>0x00&gt;<span class="p">;</span>
+<span class="w">        </span>dma-names<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;tx&quot;</span><span class="p">;</span>
+<span class="w">        </span>dma-direction<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;tx&quot;</span><span class="p">;</span>
+<span class="o">}</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The following commands will be useful for altering the default devicetree file, either built by
+Petalinux or by follwing the instructions from Analog Devices wiki, ensuring that the board can
+successfully boot with it.</p>
+<ol class="arabic simple">
+<li><p>Generate an editable devicetree file:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dtc<span class="w"> </span>-I<span class="w"> </span>dtb<span class="w"> </span>-O<span class="w"> </span>dts<span class="w"> </span>-o<span class="w"> </span>system.dts<span class="w"> </span>system.dtb
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Modify it as needed and recompile:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dtc<span class="w"> </span>-I<span class="w"> </span>dts<span class="w"> </span>-O<span class="w"> </span>dtb<span class="w"> </span>-o<span class="w"> </span>system.dtb<span class="w"> </span>system.dts
+</pre></div>
+</div>
+</div>
+<div class="section" id="cross-compiling-the-zynq-timestamping-library-and-tx-rx-example-application">
+<h3>Cross-compiling the Zynq timestamping library and Tx-Rx example application<a class="headerlink" href="#cross-compiling-the-zynq-timestamping-library-and-tx-rx-example-application" title="Permalink to this headline">¶</a></h3>
+<p>The first step is to install the SDK that was built via petalinux-tools in your host PC. This file
+is located at <em>/PETALINUX_BUILD_PATH/xilinx-zcu111-2019.2/images/linux</em>. To install it, use the
+following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./sdk.sh
+</pre></div>
+</div>
+<p>You will be prompted to specify the toolchain installation path (for instance, use
+<em>/opt/plnx_sdk_rfsoc</em>). When the installation finishes, set up the following environment variables:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>.<span class="w"> </span>/opt/plnx_sdk_rfsoc/environment-setup-aarch64-xilinx-linux
+</pre></div>
+</div>
+<p>Then, go to the <em>/app</em> subfolder in the path where the Zynq timestamping repository is cloned locally
+and execute the initialization script. It will download all necessary git submodules and compile the
+RF drivers and example Tx-Rx application. The default command builds the RF driver based on the Analog
+Devices libiio library (i.e, it is suitable for the ZCU102, plutoSDR and antSDR boards), using the
+following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./prepare.sh
+</pre></div>
+</div>
+<p>For the ZCU111 board, which uses an RFSoC device, you will need to pass an extra parameter to the
+initialization script call as follows, so that it uses the Xilinx librfdc library:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./prepare.sh<span class="w"> </span>zcu111
+</pre></div>
+</div>
+<p>When the build finishes, you will find the application under the <em>bin_app/</em> subfolder. The
+binary needs then to be transferred to the board (e.g., in <em>/home/srs/bin</em>).</p>
+<p><strong>NOTE:</strong> both ZCU bitsreams have been built by default to implement an internal buffering stage in
+the timestamped DAC path supporting storage of up to 8x 16000 sample-packets coming from the CPU - that is,
+according to the default values for the <em>CONFIG.PARAM_BUFFER_LENGTH</em> and <em>CONFIG.PARAM_MAX_DMA_PACKET_LENGTH</em>
+parameters of the
+<a class="reference external" href="https://github.com/srsran/zynq_timestamping/tree/main/ip/ADI_timestamping/RTL_code/dac_fifo_timestamp_enabler.vhd">dac_fifo_timestamp_enabler</a>
+block, which would theoretically enable storing 8 ms worth of signal up to 10 MHz BW (i.e., 15360 samples
+per subframe). Nevertheless, by default the
+<a class="reference external" href="https://github.com/srsran/zynq_timestamping/tree/main/sw/lib/src/phy/rf/rf_iio_imp.c#L36">RF IIO driver</a>
+uses DMA packets of 1920 samples - that is, 1 ms (one subframe) worth of signal for 1.4 MHz BW.</p>
+</div>
+</div>
+<div class="section" id="running">
+<h2>Running<a class="headerlink" href="#running" title="Permalink to this headline">¶</a></h2>
+<p>First of all, you need to make sure that the board is set up to implement a Tx-Rx loopback
+(e.g., cable the Tx and Rx ports together).</p>
+<p>A customized <em>txrx</em> application (aimed at demonstrating the basic capabilities of the Zynq timestamping
+solution) has been compiled and transferred to the board in the previous step. It will transmit three
+tones with a separation of 4 ms between them, while generating a capture file signal as well. A script
+is also provided to execute it. After transferring the script to the same path containing the <em>txrx</em>
+application binary in the board (e.g. <em>/home/srs/bin</em>), run the follwing command (from that path):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./run_txrx_zcu.sh
+</pre></div>
+</div>
+<p>Note that all the scripts located under ‘/app/scripts’ are meant to help the understand what applications
+can be used with each board and what parameters need to be provided.</p>
+<p>(Optional) After transferring back the data capture generated in the board to your computer, you
+can plot the captured signal with the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>show.py<span class="w"> </span>test_txrx_zcu.bin
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../rtl_module/adc_dma_packet_controller.html" class="btn btn-neutral float-right" title="ADC DMA packet controller" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="plutosdr.html" class="btn btn-neutral float-left" title="Application Note: Tx-Rx testing with ADALM-PLUTO" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Software Radio Systems.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-140380699-2', 'auto');
+    
+    ga('send', 'pageview');
+    </script>
+
+    
+   
+
+</body>
+</html>
